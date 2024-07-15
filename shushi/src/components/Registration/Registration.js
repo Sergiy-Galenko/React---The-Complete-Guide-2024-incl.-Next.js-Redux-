@@ -1,11 +1,15 @@
 // frontend/src/components/Registration/Registration.js
 import React, { useState } from 'react';
 import './Registration.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 const Registration = () => {
   const [email, setEmail] = useState('test@test.com');
   const [password, setPassword] = useState('test');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,9 +22,16 @@ const Registration = () => {
         body: JSON.stringify({ email, password })
       });
       const data = await response.json();
-      setMessage(data.message);
+      if (response.status === 201) {
+        toast.success(data.message);
+        setTimeout(() => {
+          navigate('/home');
+        }, 2000); // Redirect after 2 seconds
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
-      setMessage('Registration failed');
+      toast.error('Registration failed');
     }
   };
 
@@ -48,7 +59,7 @@ const Registration = () => {
         </div>
         <button type="submit" className="btn">Register</button>
       </form>
-      {message && <p>{message}</p>}
+      <ToastContainer />
     </div>
   );
 };

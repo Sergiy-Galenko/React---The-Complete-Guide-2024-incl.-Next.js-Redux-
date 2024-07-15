@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -21,12 +23,15 @@ const Login = () => {
       });
       const data = await response.json();
       if (response.status === 200) {
-        navigate('/welcome');
+        toast.success(data.message);
+        setTimeout(() => {
+          navigate('/home');
+        }, 2000); // Redirect after 2 seconds
       } else {
-        setMessage(data.message);
+        toast.error(data.message);
       }
     } catch (error) {
-      setMessage('Login failed');
+      toast.error('Login failed');
     }
   };
 
@@ -54,7 +59,7 @@ const Login = () => {
         </div>
         <button type="submit" className="btn">Login</button>
       </form>
-      {message && <p>{message}</p>}
+      <ToastContainer />
     </div>
   );
 };
