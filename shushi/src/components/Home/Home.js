@@ -118,6 +118,9 @@ const Home = () => {
           <img src="https://via.placeholder.com/800x300?text=Слайд+3" alt="Slide 3" />
         </div>
       </Slider>
+      <div className="delivery-text">
+        <h2>Доставка суші {selectedCity}</h2>
+      </div>
     </div>
   );
 };
