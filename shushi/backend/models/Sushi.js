@@ -1,27 +1,32 @@
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema({
-  email: {
+const SushiSchema = new mongoose.Schema({
+  id: {
     type: String,
     required: true,
     unique: true,
   },
-  password: {
+  title: {
     type: String,
     required: true,
   },
-  phone: {
+  describe: {
     type: String,
     required: true,
   },
-  lastName: {
+  price: {
+    type: Number,
+    required: true,
+  },
+  img: {
     type: String,
     required: true,
   },
-  city: {
+  type: {
     type: String,
+    enum: ['regular', 'set'],
     required: true,
   },
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Sushi', SushiSchema);

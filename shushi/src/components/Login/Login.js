@@ -1,6 +1,5 @@
-// frontend/src/components/Login/Login.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -59,6 +58,10 @@ const Login = () => {
         </div>
         <button type="submit" className="btn">Login</button>
       </form>
+      <div className="register-link">
+        <span>Don't have an account? </span>
+        <Link to="/register">Register here</Link>
+      </div>
       <ToastContainer />
     </div>
   );

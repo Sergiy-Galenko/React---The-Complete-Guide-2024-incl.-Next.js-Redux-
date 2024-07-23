@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.css';
 import logo from '../../assets/logo.png';
 import Slider from 'react-slick';
@@ -9,7 +9,23 @@ const Home = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedCity, setSelectedCity] = useState('Київ');
   const [searchQuery, setSearchQuery] = useState('');
+  const [sushi, setSushi] = useState([]);
   const cities = ['Київ', 'Львів', 'Одеса', 'Харків', 'Дніпро', 'Запоріжжя', 'Вінниця', 'Івано-Франківськ', 'Тернопіль', 'Полтава'];
+
+  useEffect(() => {
+    fetch('http://localhost:5001/sushi')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log('Fetched sushi data:', data);
+        setSushi(data);
+      })
+      .catch((error) => console.error('Error fetching sushi:', error));
+  }, []);
 
   const handleCityClick = () => {
     setShowDropdown(!showDropdown);
@@ -120,6 +136,17 @@ const Home = () => {
       </Slider>
       <div className="delivery-text">
         <h2>Доставка суші {selectedCity}</h2>
+      </div>
+      <div className="sushi-list">
+        {sushi.map((item) => (
+          <div key={item.id} className="sushi-item">
+            <h3>{item.title}</h3>
+            <p>{item.describe}</p>
+            <p>Ціна: {item.price} грн</p>
+            <img src={item.img} alt={item.title} />
+            <p>Тип: {item.type}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -4,24 +4,31 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
+const Sushi = require('./models/Sushi'); // підключіть модель Sushi
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb+srv://sgalenko783:Pass123@shushi.s3smedv.mongodb.net/?retryWrites=true&w=majority&appName=shushi', {
+mongoose.connect('mongodb+srv://sgalenko783:Pass123@shushi.s3smedv.mongodb.net/shushi?retryWrites=true&w=majority&appName=shushi', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
 app.post('/register', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, phone, lastName, city } = req.body;
   try {
     let user = await User.findOne({ email });
     if (user) {
       return res.status(400).json({ message: 'User already exists' });
     }
-    user = new User({ email, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user = new User({ email, password: hashedPassword, phone, lastName, city });
     await user.save();
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
@@ -46,7 +53,12 @@ app.post('/login', async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Маршрут для отримання всіх суші
+app.get('/sushi', async (req, res) => {
+  try {
+    const sushi = await Sushi.find();
+    res.json(sushi);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
 });
