@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Home.css';
 import logo from '../../assets/logo.png';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css"; 
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const Home = () => {
+const Home = ({ handleAddToCart, cartItems }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedCity, setSelectedCity] = useState('Київ');
   const [searchQuery, setSearchQuery] = useState('');
   const [sushi, setSushi] = useState([]);
+  const navigate = useNavigate();
   const cities = ['Київ', 'Львів', 'Одеса', 'Харків', 'Дніпро', 'Запоріжжя', 'Вінниця', 'Івано-Франківськ', 'Тернопіль', 'Полтава'];
 
   useEffect(() => {
@@ -46,6 +50,15 @@ const Home = () => {
 
   const handleClose = () => {
     setShowDropdown(false);
+  };
+
+  const handleAddToCartClick = (sushiItem) => {
+    handleAddToCart({ ...sushiItem, quantity: 1 }); // Додаємо quantity
+    toast.success(`${sushiItem.title} додано до кошика`);
+  };
+
+  const handleCartClick = () => {
+    navigate('/cart');
   };
 
   const sliderSettings = {
@@ -87,12 +100,14 @@ const Home = () => {
           <div className="home-actions">
             <span>🔍</span>
             <span>Увійти</span>
-            <span>🛒</span>
+            <span onClick={handleCartClick} style={{ cursor: 'pointer' }}>
+              🛒 {cartItems.length}
+            </span>
           </div>
         </nav>
       </header>
       {showDropdown && (
-        <div className="modal-overlay">
+        <div className="modal-overlay" style={{ zIndex: 1000 }}>
           <div className="modal">
             <div className="modal-header">
               <h2>Ваше місто</h2>
@@ -139,15 +154,17 @@ const Home = () => {
       </div>
       <div className="sushi-list">
         {sushi.map((item) => (
-          <div key={item.id} className="sushi-item">
+          <div key={item._id} className="sushi-item">
             <h3>{item.title}</h3>
             <p>{item.describe}</p>
             <p>Ціна: {item.price} грн</p>
             <img src={item.img} alt={item.title} />
             <p>Тип: {item.type}</p>
+            <button onClick={() => handleAddToCartClick(item)} className="add-to-cart-btn">Додати в кошик</button>
           </div>
         ))}
       </div>
+      <ToastContainer />
     </div>
   );
 };

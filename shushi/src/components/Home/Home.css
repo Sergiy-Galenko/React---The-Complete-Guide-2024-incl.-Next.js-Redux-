@@ -1,163 +1,199 @@
 .home-container {
-    font-family: Arial, sans-serif;
-  }
-  
-  .home-header {
-    background-color: #fff;
-    border-bottom: 1px solid #eaeaea;
-    padding: 10px 20px;
-  }
-  
-  .home-top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .home-location {
-    display: flex;
-    align-items: center;
-  }
-  
-  .language {
-    margin-left: 10px;
-  }
-  
-  .home-contact {
-    color: #333;
-  }
-  
-  .home-nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-  }
-  
-  .home-logo {
-    height: 50px;
-  }
-  
-  .home-menu {
-    list-style: none;
-    display: flex;
-    gap: 20px;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .home-menu li {
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-  
-  .home-menu li:hover {
-    color: #007bff;
-  }
-  
-  .home-actions {
-    display: flex;
-    gap: 20px;
-  }
-  
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modal {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    width: 300px;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .close-btn {
-    cursor: pointer;
-  }
-  
-  .search-input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .city-list {
-    max-height: 300px;
-    overflow-y: auto;
-  }
-  
-  .city-item {
-    padding: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .city-item:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .no-city-item {
-    padding: 10px;
-    color: #999;
-  }
-  
-  .home-slider {
-    margin-top: 20px;
-  }
-  
-  .home-slider img {
-    width: 100%;
-    border-radius: 10px;
-  }
-  
-  .delivery-text {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .sushi-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .sushi-item {
-    background-color: #fff;
-    border: 1px solid #eaeaea;
-    border-radius: 5px;
-    padding: 20px;
-    width: 300px;
-    text-align: center;
-    transition: box-shadow 0.3s ease;
-  }
-  
-  .sushi-item:hover {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .sushi-item img {
-    width: 100%;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-  
+  font-family: Arial, sans-serif;
+}
+
+.home-header {
+  background-color: #fff;
+  border-bottom: 1px solid #eaeaea;
+  padding: 10px 20px;
+}
+
+.home-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home-location {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.language {
+  margin-left: 10px;
+}
+
+.home-contact {
+  color: #333;
+}
+
+.home-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.home-logo {
+  height: 50px;
+}
+
+.home-menu {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+.home-menu li {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.home-menu li:hover {
+  color: #007bff;
+}
+
+.home-actions {
+  display: flex;
+  gap: 20px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Встановлюємо високий z-index */
+}
+
+.modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 300px;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 1001; /* Встановлюємо високий z-index */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  cursor: pointer;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.city-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.city-item {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.city-item:hover {
+  background-color: #f0f0f0;
+}
+
+.no-city-item {
+  padding: 10px;
+  color: #999;
+}
+
+.language-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.language-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.language-item:hover {
+  background-color: #f0f0f0;
+}
+
+.home-slider {
+  margin-top: 20px;
+}
+
+.home-slider img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.delivery-text {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.sushi-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.sushi-item {
+  background-color: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.sushi-item:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sushi-item img {
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.add-to-cart-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #0056b3;
+}
