@@ -6,6 +6,19 @@
   background-color: #fff;
   border-bottom: 1px solid #eaeaea;
   padding: 10px 20px;
+  position: fixed;
+  width: 100%;
+  z-index: 1000;
+  animation: slideDown 0.5s ease-in-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
 
 .home-top-bar {
@@ -49,16 +62,51 @@
 
 .home-menu li {
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
+  position: relative;
+  padding: 5px 10px;
 }
 
 .home-menu li:hover {
   color: #007bff;
+  transform: scale(1.1);
 }
 
 .home-actions {
   display: flex;
   gap: 20px;
+  align-items: center;
+}
+
+.home-actions span {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.home-actions span:hover {
+  color: #007bff;
+}
+
+.search-icon {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.search-input {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 0 10px;
+  transition: width 0.3s ease-in-out;
+}
+
+.search-icon:hover .search-input {
+  display: block;
+  width: 200px;
 }
 
 .modal-overlay {
@@ -196,4 +244,95 @@
 
 .add-to-cart-btn:hover {
   background-color: #0056b3;
+}
+.search-icon {
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.search-icon:hover {
+  color: #007bff;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 1001;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-btn {
+  cursor: pointer;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.sushi-item {
+  background-color: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 5px;
+  padding: 20px;
+  width: 300px;
+  text-align: center;
+  transition: box-shadow 0.3s ease;
+  margin: 10px 0;
+}
+
+.sushi-item:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sushi-item img {
+  width: 100%;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.add-to-cart-btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #0056b3;
+}
+
+.no-sushi-item {
+  padding: 20px;
+  text-align: center;
+  color: #999;
 }

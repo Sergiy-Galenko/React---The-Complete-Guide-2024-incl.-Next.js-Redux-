@@ -12,7 +12,10 @@ const Home = ({ handleAddToCart, cartItems }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedCity, setSelectedCity] = useState('Київ');
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchModal, setShowSearchModal] = useState(false);
   const [sushi, setSushi] = useState([]);
+  const [user, setUser] = useState({ firstName: 'Користувач' });
   const navigate = useNavigate();
   const cities = ['Київ', 'Львів', 'Одеса', 'Харків', 'Дніпро', 'Запоріжжя', 'Вінниця', 'Івано-Франківськ', 'Тернопіль', 'Полтава'];
 
@@ -29,6 +32,11 @@ const Home = ({ handleAddToCart, cartItems }) => {
         setSushi(data);
       })
       .catch((error) => console.error('Error fetching sushi:', error));
+
+    const userData = JSON.parse(localStorage.getItem('user'));
+    if (userData) {
+      setUser(userData);
+    }
   }, []);
 
   const handleCityClick = () => {
@@ -41,7 +49,27 @@ const Home = ({ handleAddToCart, cartItems }) => {
   };
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    const query = e.target.value;
+    setSearchQuery(query);
+    if (query) {
+      const results = sushi.filter(item =>
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        item.describe.toLowerCase().includes(query.toLowerCase())
+      );
+      setSearchResults(results);
+    } else {
+      setSearchResults([]);
+    }
+  };
+
+  const handleSearchIconClick = () => {
+    setShowSearchModal(true);
+  };
+
+  const handleSearchModalClose = () => {
+    setShowSearchModal(false);
+    setSearchQuery('');
+    setSearchResults([]);
   };
 
   const filteredCities = cities.filter(city =>
@@ -53,7 +81,7 @@ const Home = ({ handleAddToCart, cartItems }) => {
   };
 
   const handleAddToCartClick = (sushiItem) => {
-    handleAddToCart({ ...sushiItem, quantity: 1 }); // Додаємо quantity
+    handleAddToCart({ ...sushiItem, quantity: 1 });
     toast.success(`${sushiItem.title} додано до кошика`);
   };
 
@@ -98,8 +126,10 @@ const Home = ({ handleAddToCart, cartItems }) => {
             <li>Доповнення</li>
           </ul>
           <div className="home-actions">
-            <span>🔍</span>
-            <span>Увійти</span>
+            <span className="search-icon" onClick={handleSearchIconClick}>
+              🔍
+            </span>
+            <span>{user.firstName}</span>
             <span onClick={handleCartClick} style={{ cursor: 'pointer' }}>
               🛒 {cartItems.length}
             </span>
@@ -133,6 +163,39 @@ const Home = ({ handleAddToCart, cartItems }) => {
                 ))
               ) : (
                 <div className="no-city-item">Такого міста немає</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      {showSearchModal && (
+        <div className="modal-overlay" style={{ zIndex: 1000 }}>
+          <div className="modal">
+            <div className="modal-header">
+              <h2>Пошук суші</h2>
+              <span className="close-btn" onClick={handleSearchModalClose}>&times;</span>
+            </div>
+            <input
+              type="text"
+              placeholder="Введіть назву суші"
+              className="search-input"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <div className="sushi-list">
+              {searchResults.length > 0 ? (
+                searchResults.map((item) => (
+                  <div key={item._id} className="sushi-item">
+                    <h3>{item.title}</h3>
+                    <p>{item.describe}</p>
+                    <p>Ціна: {item.price} грн</p>
+                    <img src={item.img} alt={item.title} />
+                    <p>Тип: {item.type}</p>
+                    <button onClick={() => handleAddToCartClick(item)} className="add-to-cart-btn">Додати в кошик</button>
+                  </div>
+                ))
+              ) : (
+                <div className="no-sushi-item">Нічого не знайдено</div>
               )}
             </div>
           </div>
