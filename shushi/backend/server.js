@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const Order = require('./models/Order');
-const Sushi = require('./models/Sushi'); // підключіть модель Sushi
+const Sushi = require('./models/Sushi'); // Make sure this model is defined
 
 const app = express();
 app.use(cors());
@@ -74,7 +74,7 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-// Маршрут для отримання всіх суші
+// Route to get all sushi items
 app.get('/sushi', async (req, res) => {
   try {
     const sushi = await Sushi.find();

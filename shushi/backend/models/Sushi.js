@@ -1,32 +1,29 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const SushiSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+const SushiSchema = new Schema({
   title: {
     type: String,
-    required: true,
+    required: true
   },
   describe: {
     type: String,
-    required: true,
+    required: true
   },
   price: {
     type: Number,
-    required: true,
+    required: true
   },
   img: {
     type: String,
-    required: true,
+    required: true
   },
   type: {
     type: String,
-    enum: ['regular', 'set'],
-    required: true,
-  },
+    enum: ['normal', 'set'],
+    required: true
+  }
 });
 
-module.exports = mongoose.model('Sushi', SushiSchema);
+const Sushi = mongoose.model('Sushi', SushiSchema);
+module.exports = Sushi;
