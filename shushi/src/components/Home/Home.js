@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const Home = ({ handleAddToCart, cartItems }) => {
+const Home = ({ handleAddToCart, cartItems = [] }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedCity, setSelectedCity] = useState('Київ');
   const [searchQuery, setSearchQuery] = useState('');
@@ -107,9 +107,6 @@ const Home = ({ handleAddToCart, cartItems }) => {
             <span>{selectedCity}</span>
             <span className="language">UA</span>
           </div>
-          <div className="home-contact">
-            <span>0 800 330 333</span>
-          </div>
         </div>
         <nav className="home-nav">
           <img src={logo} alt="Sushi Master UA" className="home-logo" />
@@ -122,16 +119,14 @@ const Home = ({ handleAddToCart, cartItems }) => {
             <li>Гаряче та салати</li>
             <li>Десерти</li>
             <li>Напої</li>
-            <li>Доповнення</li>
+            <span onClick={handleCartClick} style={{ cursor: 'pointer' }}>
+              🛒 {cartItems.length}
+            </span>
           </ul>
           <div className="home-actions">
-            <span className="search-icon" onClick={handleSearchIconClick}>
-              🔍
-            </span>
-            <span>{user.firstName}</span>
-            <span onClick={handleCartClick} style={{ cursor: 'pointer' }}>
-              🛒 {cartItems ? cartItems.length : 0}
-            </span>
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </nav>
       </header>
@@ -202,13 +197,13 @@ const Home = ({ handleAddToCart, cartItems }) => {
       )}
       <Slider {...sliderSettings} className="home-slider">
         <div>
-          <img src="https://via.placeholder.com/800x300?text=Слайд+1" alt="Slide 1" />
+          <img src="https://cdn.sushi-master.ua/sm-ua/promotions/0004-zustrichajte-garyachi-novinki-sushi-burgeri-ta-rol-dogi-web-ru.jpeg?alt=media&token=b90ed098-2131-4185-ae25-b24c07f6c828}&w=1280&h=500&format=auto&mode=fit&q=60" alt="Slide 1" />
         </div>
         <div>
-          <img src="https://via.placeholder.com/800x300?text=Слайд+2" alt="Slide 2" />
+          <img src="https://cdn.sushi-master.ua/sm-ua/promotions/0001-sm-moti-web-ru.png?alt=media&token=7259d763-6b08-4729-b30a-8e9cbe725cb3}&w=1280&h=500&format=auto&mode=fit&q=60" alt="Slide 2" />
         </div>
         <div>
-          <img src="https://via.placeholder.com/800x300?text=Слайд+3" alt="Slide 3" />
+          <img src="https://cdn.sushi-master.ua/sm-ua/promotions/0002-bonusna-programa-sushi-master-2023-web-ru.png?alt=media&token=10594c1f-bb9f-416a-bf02-1f162708a541}&w=1280&h=500&format=auto&mode=fit&q=60" alt="Slide 3" />
         </div>
       </Slider>
       <div className="delivery-text">

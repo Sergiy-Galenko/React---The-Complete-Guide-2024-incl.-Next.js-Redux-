@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const User = require('./models/User');
 const Order = require('./models/Order');
-const Sushi = require('./models/Sushi'); // Make sure this model is defined
+const Sushi = require('./models/Sushi'); // підключіть модель Sushi
 
 const app = express();
 app.use(cors());
@@ -55,9 +55,9 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/create-order', async (req, res) => {
-  const { items, totalPrice } = req.body;
+  const { items, totalPrice, name, address, phone, message } = req.body;
   try {
-    const order = new Order({ items, totalPrice });
+    const order = new Order({ items, totalPrice, name, address, phone, message });
     await order.save();
     res.status(201).json({ message: 'Order created successfully', orderId: order._id });
   } catch (error) {
@@ -74,7 +74,7 @@ app.get('/orders', async (req, res) => {
   }
 });
 
-// Route to get all sushi items
+// Маршрут для отримання всіх суші
 app.get('/sushi', async (req, res) => {
   try {
     const sushi = await Sushi.find();

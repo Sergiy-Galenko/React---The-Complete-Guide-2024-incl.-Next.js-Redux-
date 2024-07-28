@@ -2,35 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Cart.css';
 
-const Cart = ({ cartItems, onRemoveFromCart, onOrderSubmit }) => {
+const Cart = ({ cartItems, onRemoveFromCart }) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     const total = cartItems.reduce((acc, item) => acc + item.price * (item.quantity || 1), 0);
-    setTotalPrice(total);
+    setTotalPrice(total.toFixed(2));
   }, [cartItems]);
 
-  const handleOrderSubmit = async () => {
-    try {
-      const response = await fetch('http://localhost:5001/create-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ items: cartItems, totalPrice })
-      });
-      const data = await response.json();
-      if (response.status === 201) {
-        alert('Замовлення створено успішно');
-        onOrderSubmit();
-        navigate('/home');
-      } else {
-        alert('Помилка створення замовлення');
-      }
-    } catch (error) {
-      alert('Помилка створення замовлення');
-    }
+  const handleProceedToOrder = () => {
+    navigate('/order');
   };
 
   const handleBackToHome = () => {
@@ -57,7 +39,7 @@ const Cart = ({ cartItems, onRemoveFromCart, onOrderSubmit }) => {
       )}
       <div className="cart-summary">
         <h3>Загальна сума: {totalPrice} грн</h3>
-        <button onClick={handleOrderSubmit} className="submit-order-btn">Сформувати замовлення</button>
+        <button onClick={handleProceedToOrder} className="submit-order-btn">Сформувати замовлення</button>
       </div>
       <button onClick={handleBackToHome} className="back-to-home-btn">Повернутися на головну</button>
     </div>

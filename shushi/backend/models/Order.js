@@ -1,28 +1,22 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const OrderSchema = new Schema({
-  items: [{
-    sushiId: {
-      type: Schema.Types.ObjectId,
-      ref: 'Sushi',
-      required: true
+const orderSchema = new mongoose.Schema({
+  items: [
+    {
+      title: String,
+      describe: String,
+      price: Number,
+      img: String,
+      type: String,
+      quantity: Number,
     },
-    quantity: {
-      type: Number,
-      required: true
-    }
-  }],
-  totalPrice: {
-    type: Number,
-    required: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-    expires: 7200 // Orders expire after 2 hours (7200 seconds)
-  }
+  ],
+  totalPrice: Number,
+  name: String,
+  address: String,
+  phone: String,
+  message: String,
+  createdAt: { type: Date, default: Date.now },
 });
 
-const Order = mongoose.model('Order', OrderSchema);
-module.exports = Order;
+module.exports = mongoose.model('Order', orderSchema);
