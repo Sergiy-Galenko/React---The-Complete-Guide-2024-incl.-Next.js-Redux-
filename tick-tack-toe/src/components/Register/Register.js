@@ -5,6 +5,7 @@ const Register = ({ switchToLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -14,7 +15,13 @@ const Register = ({ switchToLogin }) => {
       body: JSON.stringify({ username, password }),
     });
     const data = await response.json();
-    setMessage(data.message);
+    if (response.ok) {
+      setSuccess(true);
+      setMessage('Registration successful');
+    } else {
+      setSuccess(false);
+      setMessage(data.message);
+    }
   };
 
   return (
@@ -38,7 +45,7 @@ const Register = ({ switchToLogin }) => {
           />
         </div>
         <button type="submit">Register</button>
-        <p>{message}</p>
+        <p className={success ? 'success-message' : 'error-message'}>{message}</p>
         <div className="switch-form">
           <button type="button" onClick={switchToLogin}>
             Already have an account? Login

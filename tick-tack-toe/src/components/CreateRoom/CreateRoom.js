@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
-import './Login.css';
+import './CreateRoom.css';
 
-const Login = ({ setToken, switchToRegister }) => {
-  const [username, setUsername] = useState('');
+const CreateRoom = ({ setRoomId }) => {
+  const [roomName, setRoomName] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const handleLogin = async (e) => {
+  const handleCreateRoom = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:5001/api/login', {
+    const response = await fetch('http://localhost:5001/api/room', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ roomName, password }),
     });
     const data = await response.json();
     if (response.ok) {
       setSuccess(true);
-      setToken(data.token);
-      setMessage('Login successful');
+      setMessage('Room created successfully');
+      setRoomId(data.roomId);  // Set room ID to open the game window
     } else {
       setSuccess(false);
       setMessage(data.message);
@@ -27,14 +27,14 @@ const Login = ({ setToken, switchToRegister }) => {
 
   return (
     <div className="form-container">
-      <form onSubmit={handleLogin}>
-        <h2>Login</h2>
+      <form onSubmit={handleCreateRoom}>
+        <h2>Create Room</h2>
         <div>
-          <label>Username:</label>
+          <label>Room Name:</label>
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={roomName}
+            onChange={(e) => setRoomName(e.target.value)}
           />
         </div>
         <div>
@@ -45,16 +45,11 @@ const Login = ({ setToken, switchToRegister }) => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Create Room</button>
         <p className={success ? 'success-message' : 'error-message'}>{message}</p>
-        <div className="switch-form">
-          <button type="button" onClick={switchToRegister}>
-            Don't have an account? Register
-          </button>
-        </div>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default CreateRoom;

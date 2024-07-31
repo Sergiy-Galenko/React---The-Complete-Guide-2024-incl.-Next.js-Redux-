@@ -3,19 +3,32 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST']
+  }
+});
+
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb+srv://sgalenko783:Pass123@tik-tak-toe.ewgkfux.mongodb.net/?retryWrites=true&w=majority&appName=tik-tak-toe', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect('mongodb+srv://sgalenko783:Pas123@tik-tak-toe.ewgkfux.mongodb.net/?retryWrites=true&w=majority&appName=tik-tak-toe', {});
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+});
+
+const roomSchema = new mongoose.Schema({
+  roomName: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  players: { type: Array, default: [] },
 });
 
 const gameSchema = new mongoose.Schema({
@@ -23,48 +36,161 @@ const gameSchema = new mongoose.Schema({
     type: Array,
     default: [['', '', ''], ['', '', ''], ['', '', '']],
   },
-  turn: { type: String, default: 'X' },
-  winner: { type: String, default: '' },
+  turn: {
+    type: String,
+    default: 'X',
+  },
+  winner: {
+    type: String,
+    default: '',
+  },
+  roomId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Room',
+    required: true,
+  },
 });
 
 const User = mongoose.model('User', userSchema);
+const Room = mongoose.model('Room', roomSchema);
 const Game = mongoose.model('Game', gameSchema);
 
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = new User({ username, password: hashedPassword });
-  await user.save();
-  res.send({ message: 'User registered successfully' });
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ username, password: hashedPassword });
+    await user.save();
+    res.status(201).send({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(400).send({ message: 'User registration failed' });
+  }
 });
 
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  const user = await User.findOne({ username });
-  if (!user || !(await bcrypt.compare(password, user.password))) {
-    return res.status(401).send({ message: 'Invalid credentials' });
+  try {
+    const user = await User.findOne({ username });
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).send({ message: 'Invalid credentials' });
+    }
+    const token = jwt.sign({ userId: user._id }, 'secretKey');
+    res.send({ token });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Login failed' });
   }
-  const token = jwt.sign({ userId: user._id }, 'secretKey');
-  res.send({ token });
 });
 
-app.post('/api/game', async (req, res) => {
-  const newGame = new Game();
-  await newGame.save();
-  res.send(newGame);
+app.post('/api/room', async (req, res) => {
+  const { roomName, password } = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const room = new Room({ roomName, password: hashedPassword });
+    await room.save();
+    const game = new Game({ roomId: room._id });
+    await game.save();
+    res.status(201).send({ message: 'Room created successfully', roomId: room._id });
+  } catch (error) {
+    console.error(error);
+    res.status(400).send({ message: 'Room creation failed' });
+  }
 });
 
-app.get('/api/game/:id', async (req, res) => {
-  const game = await Game.findById(req.params.id);
-  res.send(game);
+app.post('/api/room/join', async (req, res) => {
+  const { roomName, password, playerName } = req.body;
+  try {
+    const room = await Room.findOne({ roomName });
+    if (!room) {
+      return res.status(404).send({ message: 'Room not found' });
+    }
+    const isMatch = await bcrypt.compare(password, room.password);
+    if (!isMatch) {
+      return res.status(401).send({ message: 'Invalid password' });
+    }
+    room.players.push(playerName);
+    await room.save();
+    res.send({ message: 'Joined room successfully', roomId: room._id });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Joining room failed' });
+  }
+});
+
+app.get('/api/game/:roomId', async (req, res) => {
+  try {
+    const game = await Game.findOne({ roomId: req.params.roomId });
+    res.send(game);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Failed to fetch game' });
+  }
 });
 
 app.put('/api/game/:id', async (req, res) => {
-  const game = await Game.findByIdAndUpdate(req.params.id, req.body, { new: true });
-  res.send(game);
+  try {
+    const game = await Game.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.send(game);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Failed to update game' });
+  }
 });
 
+io.on('connection', (socket) => {
+  console.log('a user connected');
+
+  socket.on('join_room', (roomId) => {
+    socket.join(roomId);
+    console.log(`User joined room: ${roomId}`);
+  });
+
+  socket.on('make_move', async (data) => {
+    const { roomId, row, col, turn } = data;
+    const game = await Game.findOne({ roomId });
+    if (!game || game.board[row][col] !== '' || game.winner || game.turn !== turn) return;
+
+    game.board[row][col] = turn;
+    game.turn = game.turn === 'X' ? 'O' : 'X';
+    game.winner = checkWinner(game.board);
+
+    await game.save();
+
+    io.to(roomId).emit('game_update', game);
+  });
+
+  socket.on('send_message', (data) => {
+    const { roomId, message, username } = data;
+    io.to(roomId).emit('receive_message', { message, username });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});
+
+const checkWinner = (board) => {
+  const lines = [
+    [board[0][0], board[0][1], board[0][2]],
+    [board[1][0], board[1][1], board[1][2]],
+    [board[2][0], board[2][1], board[2][2]],
+    [board[0][0], board[1][0], board[2][0]],
+    [board[0][1], board[1][1], board[2][1]],
+    [board[0][2], board[1][2], board[2][2]],
+    [board[0][0], board[1][1], board[2][2]],
+    [board[0][2], board[1][1], board[2][0]],
+  ];
+
+  for (const line of lines) {
+    if (line.every((cell) => cell === 'X')) return 'X';
+    if (line.every((cell) => cell === 'O')) return 'O';
+  }
+
+  return board.flat().every((cell) => cell) ? 'Draw' : '';
+};
+
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
