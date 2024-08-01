@@ -45,7 +45,9 @@ const Game = ({ roomId, username }) => {
   const saveMove = () => {
     if (currentMove.row === null || currentMove.col === null) return;
 
-    socket.emit('make_move', { roomId, row: currentMove.row, col: currentMove.col, turn: game.turn });
+    if (username === game.turn) {
+      socket.emit('make_move', { roomId, row: currentMove.row, col: currentMove.col, turn: game.turn });
+    }
   };
 
   const sendMessage = () => {
