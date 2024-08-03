@@ -1,0 +1,88 @@
+.home-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eaeaea;
+    padding: 5px 10px;
+    /* Зменшено розмір */
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    animation: slideDown 0.5s ease-in-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.home-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.home-location {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.language {
+    margin-left: 10px;
+}
+
+.home-nav {
+    display: flex;
+    flex-direction: column;
+    /* Додано для центрування меню */
+    align-items: center;
+    padding: 10px 0;
+}
+
+.home-logo {
+    height: 40px;
+    /* Зменшено розмір */
+}
+
+.home-menu {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    /* Центрування меню */
+}
+
+.home-menu li {
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.3s ease;
+    position: relative;
+    padding: 5px 10px;
+}
+
+.home-menu li:hover {
+    color: #007bff;
+    transform: scale(1.1);
+}
+
+.home-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin: 0 auto;
+    /* Центрування */
+}
+
+.home-actions span {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.home-actions span:hover {
+    color: #007bff;
+}

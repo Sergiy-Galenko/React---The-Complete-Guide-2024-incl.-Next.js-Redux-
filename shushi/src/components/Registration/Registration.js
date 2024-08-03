@@ -89,7 +89,7 @@ const Registration = () => {
       </form>
       <div className="login-link">
         <span>Already have an account? </span>
-        <Link to="/login">Login here</Link>
+        <Link to="/">Login here</Link>
       </div>
       <ToastContainer />
     </div>
