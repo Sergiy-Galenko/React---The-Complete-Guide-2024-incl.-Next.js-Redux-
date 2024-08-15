@@ -1,75 +1,115 @@
-.form-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .form-container h2 {
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .form-container div {
-    margin-bottom: 15px;
-  }
-  
-  .form-container label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .form-container input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-  }
-  
-  .form-container button {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .form-container button:hover {
-    background-color: #45a049;
-  }
-  
-  .form-container p {
-    text-align: center;
-  }
-  
-  .form-container .switch-form {
-    text-align: center;
-    margin-top: 10px;
-  }
-  
-  .form-container .switch-form button {
-    background-color: #007BFF;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .form-container .switch-form button:hover {
-    background-color: #0056b3;
-  }
-  
-  .success-message {
-    color: green;
-  }
-  
-  .error-message {
-    color: red;
-  }
-  
+/* Основний стиль для форми */
+.form {
+  --input-focus: #2d8cf0;
+  --font-color: #323232;
+  --font-color-sub: #666;
+  --bg-color: #fff;
+  --main-color: #323232;
+  padding: 20px;
+  background: lightgrey;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  /* Видаляємо тінь або зайву рамку */
+  box-shadow: none; /* Видалили тінь */
+}
+
+/* Стиль для заголовка */
+.title {
+  color: var(--font-color);
+  font-weight: 900;
+  font-size: 20px;
+  margin-bottom: 25px;
+}
+
+.title span {
+  color: var(--font-color-sub);
+  font-weight: 600;
+  font-size: 17px;
+}
+
+/* Стиль для полів вводу */
+.input {
+  width: 250px;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: none; /* Видалили тінь */
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--font-color);
+  padding: 5px 10px;
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--font-color-sub);
+  opacity: 0.8;
+}
+
+.input:focus {
+  border: 2px solid var(--input-focus);
+}
+
+/* Стиль для кнопок входу через соцмережі */
+.login-with {
+  display: flex;
+  gap: 20px;
+}
+
+.button-log {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: none; /* Видалили тінь */
+  color: var(--font-color);
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  fill: var(--main-color);
+}
+
+.button-log:active, .button-confirm:active {
+  box-shadow: none; /* Видалили тінь */
+  transform: translate(3px, 3px);
+}
+
+/* Стиль для кнопки підтвердження */
+.button-confirm {
+  margin: 50px auto 0 auto;
+  width: 120px;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: none; /* Видалили тінь */
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--font-color);
+  cursor: pointer;
+}
+
+/* Стиль для ссилки внизу */
+.switch-form {
+  text-align: center;
+  color: #1a73e8;
+  cursor: pointer;
+}
+
+.switch-form:hover {
+  text-decoration: underline;
+}

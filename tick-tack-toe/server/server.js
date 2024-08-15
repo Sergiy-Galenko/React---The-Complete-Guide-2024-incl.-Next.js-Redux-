@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const http = require('http');
 const { Server } = require('socket.io');
 
+// Створення серверу
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -15,11 +16,17 @@ const io = new Server(server, {
   }
 });
 
+// Підключення Middleware
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb+srv://sgalenko783:Pas123@tik-tak-toe.ewgkfux.mongodb.net/?retryWrites=true&w=majority&appName=tik-tak-toe', {});
+// Підключення до MongoDB
+mongoose.connect('mongodb+srv://sgalenko783:Pas123@tik-tak-toe.ewgkfux.mongodb.net/tik-tak-toe', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
+// Схеми Mongoose
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
@@ -28,7 +35,7 @@ const userSchema = new mongoose.Schema({
 const roomSchema = new mongoose.Schema({
   roomName: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  boardSize: { type: Number, required: true },  
+  boardSize: { type: Number, required: true },
   players: { type: Array, default: [] },
 });
 
@@ -56,10 +63,12 @@ const gameSchema = new mongoose.Schema({
   },
 });
 
+// Моделі Mongoose
 const User = mongoose.model('User', userSchema);
 const Room = mongoose.model('Room', roomSchema);
 const Game = mongoose.model('Game', gameSchema);
 
+// Роут для реєстрації
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -73,6 +82,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
+// Роут для логіну
 app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -88,6 +98,7 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// Роут для створення кімнати
 app.post('/api/room', async (req, res) => {
   const { roomName, password, boardSize } = req.body;
   try {
@@ -107,6 +118,7 @@ app.post('/api/room', async (req, res) => {
   }
 });
 
+// Роут для підключення до кімнати
 app.post('/api/room/join', async (req, res) => {
   const { roomName, password, playerName } = req.body;
   try {
@@ -127,6 +139,7 @@ app.post('/api/room/join', async (req, res) => {
   }
 });
 
+// Роут для отримання гри за roomId
 app.get('/api/game/:roomId', async (req, res) => {
   try {
     const game = await Game.findOne({ roomId: req.params.roomId });
@@ -137,6 +150,7 @@ app.get('/api/game/:roomId', async (req, res) => {
   }
 });
 
+// Роут для отримання списку лідерів
 app.get('/api/leaderboard', async (req, res) => {
   try {
     const users = await User.find().select('username games wins losses -_id');
@@ -153,6 +167,7 @@ app.get('/api/leaderboard', async (req, res) => {
   }
 });
 
+// Роут для оновлення гри
 app.put('/api/game/:id', async (req, res) => {
   try {
     const game = await Game.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -163,8 +178,9 @@ app.put('/api/game/:id', async (req, res) => {
   }
 });
 
+// Налаштування Socket.IO
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log('A user connected');
 
   socket.on('join_room', (roomId) => {
     socket.join(roomId);
@@ -191,21 +207,22 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log('User disconnected');
   });
 });
 
+// Функція перевірки переможця
 const checkWinner = (board) => {
   const size = board.length;
   const lines = [];
 
   for (let i = 0; i < size; i++) {
-    lines.push(board[i]);  
-    lines.push(board.map(row => row[i]));  
+    lines.push(board[i]);  // Перевірка рядків
+    lines.push(board.map(row => row[i]));  // Перевірка стовпців
   }
 
-  lines.push(board.map((row, i) => row[i]));  
-  lines.push(board.map((row, i) => row[size - 1 - i]));  
+  lines.push(board.map((row, i) => row[i]));  // Перевірка головної діагоналі
+  lines.push(board.map((row, i) => row[size - 1 - i]));  // Перевірка побічної діагоналі
 
   for (const line of lines) {
     if (line.every(cell => cell === 'X')) return 'X';
@@ -215,6 +232,7 @@ const checkWinner = (board) => {
   return board.flat().every(cell => cell) ? 'Draw' : '';
 };
 
+// Запуск серверу
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
