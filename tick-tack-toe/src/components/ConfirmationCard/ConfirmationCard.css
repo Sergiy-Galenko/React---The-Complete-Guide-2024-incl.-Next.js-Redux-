@@ -1,0 +1,106 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .card {
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    border-radius: 1rem;
+    max-width: 400px; /* збільшено максимальну ширину */
+    width: 90%;
+    padding: 1.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    background-color: #fff;
+  }
+  
+  .dismiss {
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    background-color: #fff;
+    color: black;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: color 0.3s ease;
+    z-index: 10; /* Додано для підняття кнопки закриття наверх */
+  }
+  
+  .dismiss:hover {
+    color: red;
+  }
+  
+  .header {
+    padding: 0;
+  }
+  
+  .image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background-color: #e2feee;
+    margin: 1rem auto;
+  }
+  
+  .image svg {
+    width: 2rem;
+    height: 2rem;
+    color: #0afa2a;
+  }
+  
+  .content .title {
+    color: #066e29;
+    font-size: 1.5rem; /* збільшено розмір шрифту */
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  
+  .content .message {
+    color: #595b5f;
+    font-size: 1.25rem; /* збільшено розмір шрифту */
+    line-height: 1.5;
+  }
+  
+  .actions {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+  }
+  
+  .actions button {
+    margin: 0.5rem 0;
+    padding: 0.75rem;
+    font-size: 1.25rem; /* збільшено розмір шрифту */
+    border-radius: 0.5rem;
+    cursor: pointer;
+  }
+  
+  .history {
+    background-color: #1aa06d;
+    color: #ffffff;
+    border: none;
+  }
+  
+  .track {
+    background-color: #fff;
+    color: #242525;
+    border: 1px solid #d1d5db;
+  }
+  

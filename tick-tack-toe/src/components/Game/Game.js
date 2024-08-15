@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
 import './Game.css';
 
 const socket = io('http://localhost:5001');
 
-const Game = ({ roomId, username }) => {
+const Game = ({ username }) => {
+  const { roomId } = useParams();
   const [game, setGame] = useState(null);
   const [message, setMessage] = useState('');
   const [chatMessages, setChatMessages] = useState([]);
@@ -43,11 +45,9 @@ const Game = ({ roomId, username }) => {
   };
 
   const saveMove = () => {
-    if (currentMove.row === null || currentMove.col === null) return;
+    if (currentMove.row === null || currentMove.col === null || username !== game.turn) return;
 
-    if (username === game.turn) {
-      socket.emit('make_move', { roomId, row: currentMove.row, col: currentMove.col, turn: game.turn });
-    }
+    socket.emit('make_move', { roomId, row: currentMove.row, col: currentMove.col, turn: game.turn });
   };
 
   const sendMessage = () => {
@@ -62,7 +62,7 @@ const Game = ({ roomId, username }) => {
   return (
     <div className="game-container">
       <h1>Tic-Tac-Toe</h1>
-      <div className="board">
+      <div className="board" style={{ gridTemplateColumns: `repeat(${game.boardSize}, 100px)` }}>
         {game.board.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
             <div

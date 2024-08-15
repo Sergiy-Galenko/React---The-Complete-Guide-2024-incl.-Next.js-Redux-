@@ -28,13 +28,14 @@ const userSchema = new mongoose.Schema({
 const roomSchema = new mongoose.Schema({
   roomName: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  boardSize: { type: Number, required: true },  
   players: { type: Array, default: [] },
 });
 
 const gameSchema = new mongoose.Schema({
   board: {
     type: Array,
-    default: [['', '', ''], ['', '', ''], ['', '', '']],
+    default: [],
   },
   turn: {
     type: String,
@@ -47,6 +48,10 @@ const gameSchema = new mongoose.Schema({
   roomId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Room',
+    required: true,
+  },
+  boardSize: {
+    type: Number,
     required: true,
   },
 });
@@ -84,12 +89,16 @@ app.post('/api/login', async (req, res) => {
 });
 
 app.post('/api/room', async (req, res) => {
-  const { roomName, password } = req.body;
+  const { roomName, password, boardSize } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const room = new Room({ roomName, password: hashedPassword });
+    const room = new Room({ roomName, password: hashedPassword, boardSize });
     await room.save();
-    const game = new Game({ roomId: room._id });
+
+    // Ініціалізація дошки відповідного розміру
+    const board = Array(boardSize).fill(null).map(() => Array(boardSize).fill(''));
+
+    const game = new Game({ roomId: room._id, board, boardSize });
     await game.save();
     res.status(201).send({ message: 'Room created successfully', roomId: room._id });
   } catch (error) {
@@ -125,6 +134,22 @@ app.get('/api/game/:roomId', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Failed to fetch game' });
+  }
+});
+
+app.get('/api/leaderboard', async (req, res) => {
+  try {
+    const users = await User.find().select('username games wins losses -_id');
+    const leaderboard = users.map(user => ({
+      nick: user.username,
+      games: user.games,
+      wins: user.wins,
+      losses: user.losses
+    }));
+    res.send(leaderboard);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: 'Failed to fetch leaderboard' });
   }
 });
 
@@ -171,23 +196,23 @@ io.on('connection', (socket) => {
 });
 
 const checkWinner = (board) => {
-  const lines = [
-    [board[0][0], board[0][1], board[0][2]],
-    [board[1][0], board[1][1], board[1][2]],
-    [board[2][0], board[2][1], board[2][2]],
-    [board[0][0], board[1][0], board[2][0]],
-    [board[0][1], board[1][1], board[2][1]],
-    [board[0][2], board[1][2], board[2][2]],
-    [board[0][0], board[1][1], board[2][2]],
-    [board[0][2], board[1][1], board[2][0]],
-  ];
+  const size = board.length;
+  const lines = [];
 
-  for (const line of lines) {
-    if (line.every((cell) => cell === 'X')) return 'X';
-    if (line.every((cell) => cell === 'O')) return 'O';
+  for (let i = 0; i < size; i++) {
+    lines.push(board[i]);  
+    lines.push(board.map(row => row[i]));  
   }
 
-  return board.flat().every((cell) => cell) ? 'Draw' : '';
+  lines.push(board.map((row, i) => row[i]));  
+  lines.push(board.map((row, i) => row[size - 1 - i]));  
+
+  for (const line of lines) {
+    if (line.every(cell => cell === 'X')) return 'X';
+    if (line.every(cell => cell === 'O')) return 'O';
+  }
+
+  return board.flat().every(cell => cell) ? 'Draw' : '';
 };
 
 const PORT = process.env.PORT || 5001;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './JoinRoom.css';
+import ConfirmationCard from '../ConfirmationCard/ConfirmationCard';
 
 const JoinRoom = ({ setRoomId }) => {
   const [roomName, setRoomName] = useState('');
@@ -18,8 +19,9 @@ const JoinRoom = ({ setRoomId }) => {
     const data = await response.json();
     if (response.ok) {
       setSuccess(true);
-      setMessage('Joined room successfully');
-      setRoomId(data.roomId);  // Set room ID to open the game window
+      setMessage('Ви успішно підключилися до кімнати');
+      setRoomId(data.roomId);
+      window.open(`/game/${data.roomId}`, '_blank');
     } else {
       setSuccess(false);
       setMessage(data.message);
@@ -29,33 +31,39 @@ const JoinRoom = ({ setRoomId }) => {
   return (
     <div className="form-container">
       <form onSubmit={handleJoinRoom}>
-        <h2>Join Room</h2>
-        <div>
-          <label>Room Name:</label>
+        <h2>Підключитися до кімнати</h2>
+        <div className="form-group">
+          <label htmlFor="roomName">Назва кімнати</label>
           <input
             type="text"
+            id="roomName"
             value={roomName}
             onChange={(e) => setRoomName(e.target.value)}
+            required
           />
         </div>
-        <div>
-          <label>Password:</label>
+        <div className="form-group">
+          <label htmlFor="password">Пароль</label>
           <input
             type="password"
+            id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
           />
         </div>
-        <div>
-          <label>Player Name:</label>
+        <div className="form-group">
+          <label htmlFor="playerName">Ім'я гравця</label>
           <input
             type="text"
+            id="playerName"
             value={playerName}
             onChange={(e) => setPlayerName(e.target.value)}
+            required
           />
         </div>
-        <button type="submit">Join Room</button>
-        <p className={success ? 'success-message' : 'error-message'}>{message}</p>
+        <button type="submit" className="join-room-button">Підключитися до кімнати</button>
+        {success && <ConfirmationCard message={message} onDismiss={() => setSuccess(false)} />}
       </form>
     </div>
   );

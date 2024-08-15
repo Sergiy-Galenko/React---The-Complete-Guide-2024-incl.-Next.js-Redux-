@@ -1,56 +1,113 @@
-.form-container {
-    max-width: 400px;
+.create-room-container {
+    max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #f9f9f9;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 1rem;
+    background-color: #fff;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.form-container h2 {
-    margin-bottom: 20px;
+.create-room-container h2 {
     text-align: center;
+    margin-bottom: 1.5rem;
 }
 
-.form-container div {
-    margin-bottom: 15px;
+.form-group {
+    margin-bottom: 1.5rem;
 }
 
-.form-container label {
+.form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 0.5rem;
 }
 
-.form-container input {
+.form-group input {
     width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
 }
 
-.form-container button {
+.pricing-plans {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.card {
+    width: 190px;
+    background: #00ffa0;
+    padding: 1rem;
+    border-radius: 1rem;
+    border: 0.5vmin solid #05060f;
+    box-shadow: 0.4rem 0.4rem #05060f;
+    overflow: hidden;
+    color: black;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card.selected {
+    border-color: #05060f;
+    background: #00ff80;
+}
+
+.pricing-block-content {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pricing-plan {
+    color: #05060f;
+    font-size: 1.3rem;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.price-value {
+    display: flex;
+    color: #05060f;
+    font-size: 1.8rem;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.pricing-note {
+    opacity: 0.8;
+}
+
+.check-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.check-list-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.create-room-button {
     width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: #1aa06d;
     color: white;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
 }
 
-.form-container button:hover {
-    background-color: #45a049;
-}
-
-.form-container p {
-    text-align: center;
-}
-
-.success-message {
-    color: green;
-}
-
-.error-message {
-    color: red;
+.create-room-button:hover {
+    background-color: #148956;
 }
