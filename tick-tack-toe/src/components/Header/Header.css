@@ -1,34 +1,40 @@
 .header {
     display: flex;
     justify-content: space-around;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-bottom: 1px solid #ccc;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f1f1f1;
+    border-bottom: 2px solid #ccc;
 }
 
-.header button {
-    padding: 10px 20px;
+.header-button {
     background-color: #4CAF50;
     color: white;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
     cursor: pointer;
-    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
-.header button:hover {
+.header-button:hover {
     background-color: #45a049;
+}
+
+.header-icon {
+    margin-right: 8px;
+    width: 24px;
+    height: 24px;
 }
 
 .leaderboard {
     margin-top: 20px;
-    max-width: 600px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.leaderboard h2 {
-    margin-bottom: 20px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .leaderboard table {
@@ -38,14 +44,16 @@
 
 .leaderboard th,
 .leaderboard td {
-    border: 1px solid #ccc;
     padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
 }
 
 .leaderboard th {
-    background-color: #f2f2f2;
+    background-color: #4CAF50;
+    color: white;
 }
 
-.leaderboard td {
-    text-align: center;
+.leaderboard tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
