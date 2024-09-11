@@ -162,4 +162,5 @@
     height: 50px; /* Збільшуємо висоту кнопки */
     background: linear-gradient(180deg, #4480FF 0%, #115DFC 50%, #0550ED 100%);
     box-shadow: 0px 0.5px 0.5px #EFEFEF, 0px 1px 0.5px rgba(239, 239, 239, 0.5);
-    border-rad
+    border-rad: 10px;
+  }
